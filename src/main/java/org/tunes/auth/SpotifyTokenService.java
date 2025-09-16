@@ -23,16 +23,17 @@ public class SpotifyTokenService implements TokenInterface {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public String getAccessToken(String authorizationCode) {
+    public Map<String, Object> getAccessToken(String authorizationCode) {
         Map<String, Object> response = requestTokens("authorization_code", authorizationCode, null);
-        return response != null ? (String) response.get("access_token") : null;
+        return response;
+                //!= null ? (String) response.get("access_token") : null;
     }
 
-    @Override
-    public String getRefreshToken(String authorizationCode) {
-        Map<String, Object> response = requestTokens("authorization_code", authorizationCode, null);
-        return response != null ? (String) response.get("refresh_token") : null;
-    }
+//    @Override
+//    public String getRefreshToken(String authorizationCode) {
+//        Map<String, Object> response = requestTokens("authorization_code", authorizationCode, null);
+//        return response != null ? (String) response.get("refresh_token") : null;
+//    }
 
     @Override
     public String refreshAccess(String refreshToken) {
