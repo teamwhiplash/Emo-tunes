@@ -1,9 +1,9 @@
 package org.tunes.auth;
 
-public interface TokenInterface {
-    String getAccessToken(String AuthCode);
+import java.util.Map;
 
-    String getRefreshToken(String Authcode);
+public interface TokenInterface {
+    Map<String,Object> getAccessToken(String AuthCode);
 
     String refreshAccess(String refresh_token);
 }
