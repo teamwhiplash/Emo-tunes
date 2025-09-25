@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
-import org.tunes.auth.SpotifyCred;
+import org.tunes.config.Credentials;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -13,12 +13,12 @@ import java.nio.charset.StandardCharsets;
 public class SpotifyLoginController {
 
     @Autowired
-    private SpotifyCred credentials;
+    private Credentials credentials;
 
     @GetMapping("/spotify/login")
     public RedirectView login() {
-        String clientId = credentials.giveClient_ID();
-        String redirectUri = credentials.getRedirect();
+        String clientId = credentials.getCLIENT_ID();
+        String redirectUri = credentials.getREDIRECT();
         String scope = "user-read-email playlist-modify-private"; // add scopes you need
         String state = "xyz123"; // random string for security
 

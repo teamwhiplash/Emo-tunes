@@ -8,6 +8,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
+import org.tunes.config.Credentials;
 
 import java.util.Base64;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class SpotifyTokenService implements TokenInterface {
 
     @Autowired
-    private SpotifyCred credentials;
+    private Credentials credentials;
 
     private final String tokenUrl = "https://accounts.spotify.com/api/token";
     private final RestTemplate restTemplate = new RestTemplate();
@@ -42,9 +43,9 @@ public class SpotifyTokenService implements TokenInterface {
     }
 
     private Map<String, Object> requestTokens(String grantType, String code, String refreshToken) {
-        String clientId = credentials.giveClient_ID();
-        String clientSecret = credentials.giveClient_Secret();
-        String spotifyRedirect = credentials.getRedirect();
+        String clientId = credentials.getCLIENT_ID();
+        String clientSecret = credentials.getCLIENT_SECRET();
+        String spotifyRedirect = credentials.getREDIRECT();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

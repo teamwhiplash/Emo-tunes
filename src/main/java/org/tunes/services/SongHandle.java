@@ -47,10 +47,13 @@ public class SongHandle {
         Map<String, Object> album = (Map<String, Object>) firstTrack.get("album");
         String releaseDate = album != null ? (String) album.get("release_date") : "Unknown Year";
 
+        String preview = firstTrack.get("preview_url")!= null ? firstTrack.get("preview_url").toString() : "No preview Available";
+
         // Build the return map
         songInfo.put("songName", songName);
         songInfo.put("artistName", artistName);
         songInfo.put("releaseDate", releaseDate);
+        songInfo.put("preview_url",preview);
 
         return songInfo;
     }
