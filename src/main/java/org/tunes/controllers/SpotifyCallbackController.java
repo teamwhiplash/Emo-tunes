@@ -28,9 +28,9 @@ public class SpotifyCallbackController {
             // Pass the auth code to service
             Map<String , Object> accessToken = tokenService.getAccessToken(authorizationCode);
             String AT = (String) accessToken.get("access_token");
-            long time = (long) accessToken.get("expires_in");
+            int time = (int) accessToken.get("expires_in");
             String RF =(String) accessToken.get("refresh_token");
-            Map<String,Object> response = Search.SearchSong(AT,"Saiyaara");
+            Map<String,Object> response = Search.SearchSong(AT,"Rasputin");
             Map<String,Object> Song = S_Handler.extractSongInfo(response);
 
 
