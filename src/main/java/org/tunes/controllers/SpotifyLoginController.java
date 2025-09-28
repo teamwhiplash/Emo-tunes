@@ -22,6 +22,7 @@ public class SpotifyLoginController {
         String scope = "user-read-email playlist-modify-private"; // add scopes you need
         String state = "xyz123"; // random string for security
 
+
         String url = "https://accounts.spotify.com/authorize"
                 + "?client_id=" + clientId
                 + "&response_type=code"
