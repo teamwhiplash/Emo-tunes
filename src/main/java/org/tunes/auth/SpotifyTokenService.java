@@ -35,6 +35,13 @@ public class SpotifyTokenService implements TokenInterface {
 //        Map<String, Object> response = requestTokens("authorization_code", authorizationCode, null);
 //        return response != null ? (String) response.get("refresh_token") : null;
 //    }
+    @Override
+    public Map<String, Object> getATCC() {
+        Map<String, Object> response = requestTokens("client_credentials", null, null);
+        return response;
+    }
+
+
 
     @Override
     public String refreshAccess(String refreshToken) {

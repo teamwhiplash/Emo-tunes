@@ -19,7 +19,7 @@ public class SpotifyLoginController {
     public RedirectView login() {
         String clientId = credentials.getCLIENT_ID();
         String redirectUri = credentials.getREDIRECT();
-        String scope = "user-read-email playlist-modify-private"; // add scopes you need
+        String scope = "user-read-email playlist-modify-private user-library-read"; // add scopes you need
         String state = "xyz123"; // random string for security
 
         String url = "https://accounts.spotify.com/authorize"

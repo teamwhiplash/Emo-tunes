@@ -6,4 +6,6 @@ public interface TokenInterface {
     Map<String,Object> getAccessToken(String AuthCode);
 
     String refreshAccess(String refresh_token);
+
+    Map<String,Object> getATCC();
 }
