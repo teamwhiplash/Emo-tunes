@@ -40,3 +40,6 @@ application-*.properties
 
 # Mac OS
 .DS_Store
+
+.env
+application.properties
