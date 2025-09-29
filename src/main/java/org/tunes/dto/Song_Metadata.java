@@ -1,4 +1,4 @@
-package org.tunes.DTOs;
+package org.tunes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
