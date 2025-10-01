@@ -1,7 +1,6 @@
 package org.tunes.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,38 +19,11 @@ interface SpotifySearchBuilder{
    public String BuildUrl(String Query);
 }
 
-class SearchID implements SpotifySearchBuilder{
-    private final String BaseURL="https://api.spotify.com/v1/tracks/";
-@Override
-public String BuildUrl(String Query){
-    String ID_URL;
-    ID_URL = BaseURL+ Query;
-
-    return ID_URL;
-}
-}
-
-//public class SearchSong implements SpotifySearchBuilder{
-//    private final String baseURL="https://api.spotify.com/v1/search";
-//    @Override
-//    public String BuildUrl(String Query){
-//        String encoded = URLEncoder.encode(Query,StandardCharsets.UTF_8);
-//        String Name_URL;
-//        Name_URL= baseURL+ "?q=" + encoded + "&type=track&limit=1";
-//
-//        return Name_URL;
-//    }
-//}
-//
 @Service
 public class SpotifySearch {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    public interface SpotifySearchBuilder {
-        String BuildUrl(String query);
-    }
 
     public static class SearchSong implements SpotifySearchBuilder {
         private final String baseURL = "https://api.spotify.com/v1/search";
@@ -60,6 +32,16 @@ public class SpotifySearch {
         public String BuildUrl(String query) {
             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
             return baseURL + "?q=" + encoded + "&type=track&limit=1";
+        }
+    }
+    public static class SearchID implements SpotifySearchBuilder {
+        private final String BaseURL="https://api.spotify.com/v1/tracks/";
+        @Override
+        public String BuildUrl(String Query){
+            String ID_URL;
+            ID_URL = BaseURL+ Query;
+
+            return ID_URL;
         }
     }
 
