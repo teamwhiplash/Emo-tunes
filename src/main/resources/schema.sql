@@ -24,16 +24,6 @@ CREATE TABLE IF NOT EXISTS songs (
     cover_url VARCHAR(500),
     duration_seconds INT,
     song_url VARCHAR(500),
-    danceability DECIMAL(5,2),
-    energy DECIMAL(5,2),
-    key_sig VARCHAR(10),
-    loudness DECIMAL(6,2),
-    speechiness DECIMAL(5,2),
-    acousticness DECIMAL(5,2),
-    instrumentalness DECIMAL(5,2),
-    liveness DECIMAL(5,2),
-    valence DECIMAL(5,2),
-    tempo DECIMAL(6,2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
