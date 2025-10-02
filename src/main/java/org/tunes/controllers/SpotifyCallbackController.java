@@ -3,7 +3,7 @@ package org.tunes.controllers;
 import org.springframework.http.ResponseEntity;
 import org.tunes.components.TokenStore;
 import org.tunes.dto.UserInfo;
-import org.tunes.models.User;
+import org.tunes.models.Users;
 import org.tunes.repositories.UserRepository;
 import org.tunes.services.SpotifySearch;
 import org.tunes.services.SongHandle;
@@ -54,7 +54,7 @@ public class SpotifyCallbackController {
             String email = (String) userDetails.get("email");
             String displayName = (String) userDetails.get("display_name");
             Map<Long , String> accessTokenStore = new HashMap<>();
-            User user = new User();
+            Users user = new Users();
             user.setSpotifyId(spotifyId);
             user.setEmail(email);
             user.setUsername(displayName);
@@ -62,7 +62,7 @@ public class SpotifyCallbackController {
 
 
             userService.saveOrUpdateUser(user);
-            User dbUser = userRepository.findBySpotifyId(spotifyId);
+            Users dbUser = userRepository.findBySpotifyId(spotifyId);
             Long userId = dbUser.getId();
             String username = dbUser.getUsername();
             String emailId = dbUser.getEmail();

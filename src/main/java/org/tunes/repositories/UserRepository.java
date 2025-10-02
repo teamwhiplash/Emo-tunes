@@ -1,12 +1,10 @@
 package org.tunes.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.tunes.models.User;
+import org.tunes.models.Users;
 
-import java.util.Optional;
-
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findBySpotifyId(String spotifyId);
-    User findByEmail(String email);
-    User findByUsername(String username);
+public interface UserRepository extends JpaRepository<Users, Long> {
+    Users findBySpotifyId(String spotifyId);
+    Users findByEmail(String email);
+    Users findByUsername(String username);
 }

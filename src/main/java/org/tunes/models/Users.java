@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @Table(name = "users", schema = "emotunes") // matches your DB
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment ID
