@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.tunes.dto.SongInfo;
 import org.tunes.dto.UserInfo;
 import org.tunes.models.User;
+import org.tunes.models.Users;
 import org.tunes.services.SongMapper;
 import org.tunes.services.SpotifySearch;
 import org.tunes.services.SpotifyUserService;
@@ -88,12 +89,12 @@ public class SpotifyCallbackController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            User user = new User();
+            Users user = new Users();
             user.setSpotifyId(spotifyId);
             user.setEmail(email);
             user.setUsername(displayName);
             user.setRefreshToken(refreshToken);
-            User persisted = userService.saveOrUpdateUser(user);
+            Users persisted = userService.saveOrUpdateUser(user);
 
             if (persisted == null) {
                 LOG.error("User service failed to persist user with Spotify ID {}", spotifyId);
