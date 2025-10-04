@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.tunes.auth.SpotifyTokenService;
 import org.tunes.components.TokenInfo;
 import org.tunes.components.TokenStore;
-import org.tunes.models.User;
+import org.tunes.models.Users;
 import org.tunes.repositories.UserRepository;
 
 @Service
@@ -22,13 +22,13 @@ public class SpotifyAPIHelper {
         this.spotifyTokenService = spotifyTokenService;
     }
 
-    public String getValidAccessToken(Long userId) {
+    public String getValidAccessToken(int userId) {
         String cached = tokenStore.getValidAccessToken(userId);
         if (cached != null) {
             return cached;
         }
 
-        User user = userRepository.findById(userId)
+        Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
 
         String refreshed = spotifyTokenService.refreshAccess(user.getRefreshToken());

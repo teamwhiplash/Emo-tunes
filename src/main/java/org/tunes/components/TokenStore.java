@@ -14,18 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class TokenStore {
-    private final Map<Long, TokenInfo> accessTokenStore = new ConcurrentHashMap<>();
+    private final Map<Integer, TokenInfo> accessTokenStore = new ConcurrentHashMap<>();
 
-    public void putInto(Long userId, TokenInfo tokenInfo) {
+    public void putInto(int userId, TokenInfo tokenInfo) {
         accessTokenStore.put(userId, tokenInfo);
     }
 
-    public String getValidAccessToken(Long userId) {
+    public String getValidAccessToken(int userId) {
         TokenInfo info = accessTokenStore.get(userId);
         return (info != null && !info.isExpired()) ? info.getAccessToken() : null;
     }
 
-    public Map<Long, TokenInfo> getAll() {
+    public Map<Integer, TokenInfo> getAll() {
         return accessTokenStore;
     }
 }
