@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.tunes.dto.SongInfo;
 import org.tunes.dto.UserInfo;
-import org.tunes.models.User;
+import org.tunes.models.Users;
 import org.tunes.models.Users;
 import org.tunes.services.SongMapper;
 import org.tunes.services.SpotifySearch;
@@ -77,6 +77,7 @@ public class SpotifyCallbackController {
             Map<String,Object> SongResponse = search.RequestSong(accessToken,"Saiyaara", new SpotifySearch.SearchSong());
             SongInfo Song = mapper.toSongInfo(SongResponse);
             System.out.println("\n");
+            System.out.println(Song);
             System.out.println("Song Name:"+ Song.getSongName()+"\n"+"Artist:"+ Song.getArtistName());
 
             Map<String, Object> userDetails = spotifyUserService.getCurrentUser(accessToken);
@@ -101,7 +102,7 @@ public class SpotifyCallbackController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
 
-            Long userId = persisted.getId();
+            int userId = persisted.getId();
 
             long expiresIn = ((Number) tokenResponse.get("expires_in")).longValue();
             TokenInfo tokenInfo = new TokenInfo(accessToken, expiresIn);
