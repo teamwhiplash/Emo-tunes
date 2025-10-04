@@ -7,5 +7,4 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findBySpotifyId(String spotifyId);
     Users findByEmail(String email);
     Users findByUsername(String username);
-
 }

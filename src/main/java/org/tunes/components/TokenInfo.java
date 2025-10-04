@@ -1,5 +1,7 @@
 package org.tunes.components;
 
+import org.springframework.stereotype.Service;
+
 public class TokenInfo {
     private final String accessToken;
     private final long expiresAt;

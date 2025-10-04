@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS playlists (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_playlist_user FOREIGN KEY (user_id) REFERENCES emotunes.users(id) ON DELETE CASCADE
+    CONSTRAINT fk_playlist_user FOREIGN KEY (id) REFERENCES emotunes.users(id) ON DELETE CASCADE
 );
 
 -- ======================
