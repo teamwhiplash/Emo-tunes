@@ -78,35 +78,6 @@ public class Songs {
     public Integer getDurationSeconds() { return durationSeconds; }
     public void setDurationSeconds(Integer durationSeconds) { this.durationSeconds = durationSeconds; }
 
-    public Double getDanceability() { return danceability; }
-    public void setDanceability(Double danceability) { this.danceability = danceability; }
-
-    public Double getEnergy() { return energy; }
-    public void setEnergy(Double energy) { this.energy = energy; }
-
-    public String getKeySig() { return keySig; }
-    public void setKeySig(String keySig) { this.keySig = keySig; }
-
-    public Double getLoudness() { return loudness; }
-    public void setLoudness(Double loudness) { this.loudness = loudness; }
-
-    public Double getSpeechiness() { return speechiness; }
-    public void setSpeechiness(Double speechiness) { this.speechiness = speechiness; }
-
-    public Double getAcousticness() { return acousticness; }
-    public void setAcousticness(Double acousticness) { this.acousticness = acousticness; }
-
-    public Double getInstrumentalness() { return instrumentalness; }
-    public void setInstrumentalness(Double instrumentalness) { this.instrumentalness = instrumentalness; }
-
-    public Double getLiveness() { return liveness; }
-    public void setLiveness(Double liveness) { this.liveness = liveness; }
-
-    public Double getValence() { return valence; }
-    public void setValence(Double valence) { this.valence = valence; }
-
-    public Double getTempo() { return tempo; }
-    public void setTempo(Double tempo) { this.tempo = tempo; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 
