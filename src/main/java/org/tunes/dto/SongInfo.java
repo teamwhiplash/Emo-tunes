@@ -10,5 +10,8 @@ public class SongInfo {
     String songName;
     String artistName;
     String releaseDate;
+    String coverURL;
+    Integer duration;
+    String songURL;
 
 }
