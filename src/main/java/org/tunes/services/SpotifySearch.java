@@ -38,7 +38,7 @@ private SongMapper mapper;
         @Override
         public String BuildUrl(String query) {
             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            return baseURL + "?q=" + encoded + "&type=track&limit=1";
+            return baseURL + "?q=" + encoded + "&type=track&";
         }
     }
     public static class SearchID implements SpotifySearchBuilder {

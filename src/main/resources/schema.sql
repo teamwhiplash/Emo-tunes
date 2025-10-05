@@ -24,8 +24,7 @@ CREATE TABLE IF NOT EXISTS songs (
     cover_url VARCHAR(500),
     duration_milliseconds INT,
     song_url VARCHAR(500),
-    emotion VARCHAR(10) DEFAULT 'uplift'
-            CHECK (emotion IN ('happy', 'love', 'sad', 'uplift', 'rage')),
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -42,7 +41,6 @@ CREATE TABLE IF NOT EXISTS playlists (
     emotion VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
     CONSTRAINT fk_playlist_user FOREIGN KEY (user_id) REFERENCES emotunes.users(id) ON DELETE CASCADE
 );
 
