@@ -2,6 +2,8 @@ package org.tunes.controllers;
 
 import java.util.Map;
 import java.util.Objects;
+
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.tunes.dto.SongInfo;
 import org.tunes.dto.UserInfo;
-import org.tunes.models.Users;
 import org.tunes.models.Users;
 import org.tunes.services.SongMapper;
 import org.tunes.services.SpotifySearch;
@@ -41,7 +42,7 @@ public class SpotifyCallbackController {
     public SongMapper mapper;
 
     public SpotifyCallbackController(
-            TokenInterface tokenService,
+           TokenInterface tokenService,
             SpotifyUserService spotifyUserService,
             UserService userService,
             UserRepository userRepository,
@@ -127,28 +128,22 @@ public class SpotifyCallbackController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-}
 
+}
 //package org.tunes.controllers;
 //
-//import org.springframework.http.ResponseEntity;
+//import java.util.Map;
+//import java.util.Objects;
+//import org.slf4j.*;
+//import org.springframework.http.*;
+//import org.springframework.web.bind.annotation.*;
+//import org.tunes.auth.TokenInterface;
+//import org.tunes.components.TokenInfo;
 //import org.tunes.components.TokenStore;
-//import org.tunes.dto.UserInfo;
+//import org.tunes.dto.*;
 //import org.tunes.models.User;
 //import org.tunes.repositories.UserRepository;
-//import org.tunes.services.SpotifySearch;
-//import org.tunes.services.SongHandle;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.tunes.auth.TokenInterface;
-//import org.tunes.services.SpotifyUserService;
-//import org.tunes.services.UserService;
-//import java.util.HashMap;
-//import java.util.Map;
-//
+//import org.tunes.services.*;
 //
 //@RestController
 //public class SpotifyCallbackController {

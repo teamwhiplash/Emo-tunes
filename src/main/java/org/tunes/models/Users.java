@@ -37,44 +37,4 @@ public class Users {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSpotifyId() {
-        return spotifyId;
-    }
-
-    public void setSpotifyId(String spotifyId) {
-        this.spotifyId = spotifyId;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
 }

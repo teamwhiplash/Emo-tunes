@@ -1,5 +1,6 @@
 package org.tunes.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tunes.models.Users;
@@ -8,7 +9,8 @@ import org.tunes.repositories.UserRepository;
 import java.util.Optional;
 
 @Service
-public class UserService {
+@RequiredArgsConstructor
+public class  UserService {
 
     @Autowired
     private UserRepository userRepository;
