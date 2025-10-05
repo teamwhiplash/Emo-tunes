@@ -74,12 +74,6 @@ public class SpotifyCallbackController {
                 LOG.error("Token service returned no access_token for code {}", authorizationCode);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            //Song Test:
-            Map<String,Object> SongResponse = search.RequestSong(accessToken,"Saiyaara", new SpotifySearch.SearchSong());
-            SongInfo Song = mapper.toSongInfo(SongResponse);
-            System.out.println("\n");
-            System.out.println(Song);
-            System.out.println("Song Name:"+ Song.getSongName()+"\n"+"Artist:"+ Song.getArtistName());
 
             Map<String, Object> userDetails = spotifyUserService.getCurrentUser(accessToken);
             String spotifyId = (String) userDetails.get("id");

@@ -48,13 +48,13 @@ public class Song_meta {
     @PostMapping("/send")
     public Mono<String> sendSongMeta() {
         // 1️⃣ Get a valid access token
-        String access = tokenStore.getValidAccessToken(5);   // demo uid = 5
+        String access = tokenStore.getValidAccessToken(1);   // demo uid = 5
 
         // 2️⃣ Get song info
         Map<String, Object> songResponse = spotifySearch.RequestSong(
                 access,
                 "Saiyaara",
-                new SpotifySearch.SearchSong());
+                new SpotifySearch.SearchSong(),"1","0");
 
         SongInfo song = mapper.toSongInfo(songResponse);
 
