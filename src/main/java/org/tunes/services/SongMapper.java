@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.tunes.dto.SongInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,6 +46,48 @@ public class SongMapper {
                 .releaseDate(releaseDate)
                 .build();
     }
+    @SuppressWarnings("unchecked")
+    public List<SongInfo> toSongInfoList(Map<String, Object> response) {
+        List<SongInfo> songList = new ArrayList<>();
+
+        if (response == null || response.isEmpty()) return songList;
+
+        // The "tracks" key might contain either a List<Map> directly or Map with "items"
+        Object tracksObj = response.get("tracks");
+        List<Map<String, Object>> items;
+
+        if (tracksObj instanceof List) {
+            items = (List<Map<String, Object>>) tracksObj;
+        } else if (tracksObj instanceof Map) {
+            Map<String,Object> tracksMap = (Map<String, Object>) tracksObj;
+            items = (List<Map<String, Object>>) tracksMap.get("items");
+        } else {
+            return songList;
+        }
+
+        if (items == null) return songList;
+
+        for (Map<String,Object> trackData : items) {
+            // if trackData contains "track" key (like in playlists), unwrap it
+            if (trackData.containsKey("track")) {
+                trackData = (Map<String,Object>) trackData.get("track");
+            }
+            SongInfo song = SongInfo.builder()
+                    .songID(Optional.ofNullable((String) trackData.get("id")).orElse("Unknown ID"))
+                    .songName(Optional.ofNullable((String) trackData.get("name")).orElse("Unknown Song"))
+                    .artistName(extractFirstArtistName(trackData).orElse("Unknown Artist"))
+                    .coverURL(extractCoverUrl(trackData).orElse("No Cover URL"))
+                    .releaseDate(extractReleaseDate(trackData).orElse("Unknown Year"))
+                    .duration(extractDuration(trackData).orElse(null))
+                    .songURL(extractSongUrl(trackData).orElse("Unknown Song"))
+                    .build();
+
+            songList.add(song);
+        }
+
+        return songList;
+    }
+
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> extractFirstTrack(Map<String, Object> response) {

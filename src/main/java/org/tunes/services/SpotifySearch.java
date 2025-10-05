@@ -16,6 +16,7 @@ import org.tunes.dto.SongInfo;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ private SongMapper mapper;
         @Override
         public String BuildUrl(String query) {
             String encoded = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            return baseURL + "?q=" + encoded + "&type=track&";
+            return baseURL + "?q=" + encoded + "&type=track";
         }
     }
     public static class SearchID implements SpotifySearchBuilder {
@@ -47,7 +48,6 @@ private SongMapper mapper;
         public String BuildUrl(String Query){
             String ID_URL;
             ID_URL = BaseURL+ Query;
-
             return ID_URL;
         }
     }
@@ -136,9 +136,11 @@ private SongMapper mapper;
      * Handles nested JSON safely and returns the first track if available.
      */
     @NonNull
-    public Map<String, Object> RequestSong(String accessToken, String query, SpotifySearchBuilder builder) {
+    public Map<String, Object> RequestSong(String accessToken, String query, SpotifySearchBuilder builder,String limit, String offset) {
         String url = builder.BuildUrl(query);
+        String finalUrl = url + "&limit="+limit + "&offset="+offset;
         System.out.println(url);
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -146,14 +148,13 @@ private SongMapper mapper;
         try {
             // Step 1: Get raw JSON string from Spotify
             ResponseEntity<String> rawResponse = restTemplate.exchange(
-                    url,
+                    finalUrl,
                     HttpMethod.GET,
                     entity,
                     String.class
             );
 
             String rawJson = rawResponse.getBody();
-            System.out.println("Raw JSON from Spotify: " + rawJson);
 
             if (rawJson == null || rawJson.isEmpty()) {
                 throw new RuntimeException("Spotify returned empty response body");
@@ -162,19 +163,22 @@ private SongMapper mapper;
             // Step 2: Parse JSON into Map
             Map<String, Object> responseMap = objectMapper.readValue(rawJson, Map.class);
 
-            // Step 3: If tracks → items exists, return first track
+            // Step 3: If "tracks" exist, return all items instead of just the first
             if (responseMap.containsKey("tracks")) {
                 Map<String, Object> tracks = (Map<String, Object>) responseMap.get("tracks");
                 if (tracks != null) {
                     List<Map<String, Object>> items = (List<Map<String, Object>>) tracks.get("items");
                     if (items != null && !items.isEmpty()) {
-                        System.out.println("Items: "+ items);
-                        return items.get(0); // return first track directly
+                        System.out.println("✅ Total tracks found: " + items.size());
+                        // Wrap the list into a map so return type stays consistent
+                        Map<String, Object> result = new HashMap<>();
+                        result.put("tracks", items);
+                        return result;
                     }
                 }
             }
 
-            // Fallback: return full response map if no tracks found
+            // Fallback: return the full response map if no "tracks" found
             return responseMap;
 
         } catch (Exception e) {
@@ -182,6 +186,7 @@ private SongMapper mapper;
             throw new RuntimeException("Error searching Spotify", e);
         }
     }
+
 }
 
 
