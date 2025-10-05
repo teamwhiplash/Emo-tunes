@@ -31,4 +31,10 @@ public class songMetaDTO {
 
     /** 0‑5 scale – higher = more rage (rarely used) */
     @NonNull private Double rage;
+
+    @NonNull private String dominantEmotion;
+
+    @NonNull private String dominantScore;
+
+    @NonNull private String emotionalTag;
 }
