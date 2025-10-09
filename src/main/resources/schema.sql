@@ -37,13 +37,12 @@ CREATE TABLE IF NOT EXISTS playlists (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     name VARCHAR(150) NOT NULL,
-    spotify_id VARCHAR(100) NOT NULL UNIQUE,
     cover_url VARCHAR(500),
     emotion VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_playlist_user FOREIGN KEY (id) REFERENCES emotunes.users(id) ON DELETE CASCADE
+    CONSTRAINT fk_playlist_user FOREIGN KEY (user_id) REFERENCES emotunes.users(id) ON DELETE CASCADE
 );
 
 -- ======================
