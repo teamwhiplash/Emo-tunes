@@ -46,17 +46,16 @@ public class Song_meta {
 
     // ----- POST endpoint to send song info to n8n -----
     @PostMapping("/send")
-    public Mono<String> sendSongMeta() {
+    public Mono<String> sendSongMeta(@RequestParam String query) {
         // 1️⃣ Get a valid access token
-        String access = tokenStore.getValidAccessToken(1);   // demo uid = 5
+        String access = tokenStore.getValidAccessToken(5);   // demo uid = 5
 
         // 2️⃣ Get song info
         Map<String, Object> songResponse = spotifySearch.RequestSong(
-                access,
-                "Saiyaara",
+                access, query,
                 new SpotifySearch.SearchSong(),"1","0");
 
-        SongInfo song = mapper.toSongInfo(songResponse);
+        SongInfo song = mapper.extractTrack(songResponse);
 
         // 3️⃣ Build JSON payload for n8n
         Map<String, Object> requestBody = new HashMap<>();
@@ -71,7 +70,7 @@ public class Song_meta {
                 .bodyValue(requestBody)
                 .retrieve()
                 .bodyToMono(String.class)
-                .timeout(Duration.ofSeconds(60))  // ⏱ Wait max 1 minute
+                .timeout(Duration.ofSeconds(80))  // ⏱ Wait max 1 minute
                 .doOnNext(response -> {
                     try {
                         Object json = prettyMapper.readValue(response, Object.class);

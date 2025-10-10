@@ -31,20 +31,6 @@ public class Songs {
 
     private Integer durationSeconds;
 
-    private Double danceability;
-    private Double energy;
-
-    @Column(length = 10)
-    private String keySig;
-
-    private Double loudness;
-    private Double speechiness;
-    private Double acousticness;
-    private Double instrumentalness;
-    private Double liveness;
-    private Double valence;
-    private Double tempo;
-
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
