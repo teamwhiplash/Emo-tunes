@@ -52,7 +52,7 @@ public class SpotifySearchController {
         return ResponseEntity.ok().body(Playlist);
     }
 
-    @PostMapping("/Open")
+    @PostMapping("/open")
     public String openSpotify(@RequestParam String id){
         if (id == null || id.isEmpty()) {
             return "Error: Missing Spotify track ID!";
