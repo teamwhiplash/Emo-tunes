@@ -1,8 +1,12 @@
 package org.tunes.services;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.tunes.controllers.SpotifyCallbackController;
 import org.tunes.dto.SongInfo;
+import java.util.function.BiFunction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class SongMapper {
+    public Logger log = LoggerFactory.getLogger(SongMapper.class);
 
     public SongInfo toSongInfo(Map<String, Object> response) {
         if (response == null || response.isEmpty()) {
@@ -90,7 +95,7 @@ public class SongMapper {
 
 
     @SuppressWarnings("unchecked")
-    private Map<String, Object> extractFirstTrack(Map<String, Object> response) {
+    public Map<String, Object> extractFirstTrack(Map<String, Object> response) {
         if (response.containsKey("tracks")) {
             Map<String, Object> tracks = (Map<String, Object>) response.get("tracks");
             if (tracks != null) {
@@ -182,4 +187,126 @@ public class SongMapper {
                 .releaseDate("N/A")
                 .build();
     }
+    public SongInfo extractTrack(Map<String, Object> response) {
+        log.debug("Received Spotify payload: {}", response);
+
+        Map<String, Object> firstTrack = locateFirstTrack(response);
+        if (firstTrack == null) {
+            log.warn("No track could be extracted from the Spotify response");
+            return null;                     // caller can decide what to do with a null
+        }
+
+        // --------------------------------------------------------------
+        // 1️⃣  Extract the fields required by SongInfo
+        // --------------------------------------------------------------
+        String songId   = getString(firstTrack, "id");
+        String songName = getString(firstTrack, "name");
+
+        Integer durationMs = firstTrack.get("duration_ms") instanceof Number
+                ? ((Number) firstTrack.get("duration_ms")).intValue()
+                : null;
+        Integer durationSec = (durationMs != null) ? durationMs / 1000 : null;
+
+        // artist – take the first element of the artists array
+        String artistName = Optional.ofNullable(getList(firstTrack, "artists"))
+                .filter(l -> !l.isEmpty())
+                .map(l -> getString(l.get(0), "name"))
+                .orElse(null);
+
+        // album data ----------------------------------------------------
+        Map<String, Object> album = getMap(firstTrack, "album");
+        String releaseDate = getString(album, "release_date");
+
+        // cover image – first image in album.images
+        String coverUrl = Optional.ofNullable(getList(album, "images"))
+                .filter(l -> !l.isEmpty())
+                .map(l -> getString(l.get(0), "url"))
+                .orElse(null);
+
+        // external Spotify URL
+        Map<String, Object> externalUrls = getMap(firstTrack, "external_urls");
+        String songUrl = getString(externalUrls, "spotify");
+
+        log.info("Mapped track {} – {}", songId, songName);
+
+        return SongInfo.builder()
+                .songID(songId)
+                .songName(songName)
+                .artistName(artistName)
+                .releaseDate(releaseDate)
+                .coverURL(coverUrl)
+                .duration(durationSec)
+                .songURL(songUrl)
+                .build();
+    }
+
+    // -----------------------------------------------------------------
+    // 2️⃣  Helper that finds the *first* track, handling every known shape
+    // -----------------------------------------------------------------
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> locateFirstTrack(Map<String, Object> response) {
+        if (response == null) {
+            return null;
+        }
+
+        // ----------- a) search‑tracks response : tracks → items ---------
+        Object tracksObj = response.get("tracks");
+        if (tracksObj instanceof Map) {
+            Map<String, Object> tracksMap = (Map<String, Object>) tracksObj;
+            Object itemsObj = tracksMap.get("items");
+            if (itemsObj instanceof List) {
+                List<Map<String, Object>> items = (List<Map<String, Object>>) itemsObj;
+                if (!items.isEmpty()) {
+                    return items.get(0);
+                }
+            }
+        }
+
+        // ----------- b) your current payload : tracks is a List ----------
+        if (tracksObj instanceof List) {
+            List<Map<String, Object>> list = (List<Map<String, Object>>) tracksObj;
+            if (!list.isEmpty()) {
+                return list.get(0);          // first element *is* the track
+            }
+        }
+
+        // ----------- c) playlist‑items response : items → track ----------
+        Object itemsObj = response.get("items");
+        if (itemsObj instanceof List) {
+            List<Map<String, Object>> wrappers = (List<Map<String, Object>>) itemsObj;
+            for (Map<String, Object> wrapper : wrappers) {
+                Object inner = wrapper.get("track");
+                if (inner instanceof Map) {
+                    return (Map<String, Object>) inner;   // first non‑null track
+                }
+            }
+        }
+
+        // ----------- d) single‑track payload (already a track) ----------
+        if (response.containsKey("id") && response.containsKey("name")) {
+            return response;                 // the whole map is the track
+        }
+
+        // nothing matched
+        return null;
+    }
+
+    // -----------------------------------------------------------------
+    // 3️⃣  Tiny “safe‑cast” helpers – keep the main code tidy
+    // -----------------------------------------------------------------
+    @SuppressWarnings("unchecked")
+    private static String getString(Map<String, Object> map, String key) {
+        return (map != null && map.get(key) instanceof String) ? (String) map.get(key) : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> getMap(Map<String, Object> map, String key) {
+        return (map != null && map.get(key) instanceof Map) ? (Map<String, Object>) map.get(key) : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<Map<String, Object>> getList(Map<String, Object> map, String key) {
+        return (map != null && map.get(key) instanceof List) ? (List<Map<String, Object>>) map.get(key) : null;
+    }
 }
+

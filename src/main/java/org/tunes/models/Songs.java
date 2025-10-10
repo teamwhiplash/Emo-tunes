@@ -37,6 +37,17 @@ public class Songs {
     @Column(name = "duration_milliseconds")
     private Integer durationMilliseconds;
 
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    // Constructors
+    public Songs() {}
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     @Column(name = "song_url", length = 500)
     private String songUrl;
 

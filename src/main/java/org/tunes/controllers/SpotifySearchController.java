@@ -3,16 +3,14 @@ package org.tunes.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tunes.components.TokenStore;
 import org.tunes.dto.PlaylistInfo;
 import org.tunes.dto.SongInfo;
 import org.tunes.services.SongMapper;
 import org.tunes.services.SpotifySearch;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -53,4 +51,36 @@ public class SpotifySearchController {
         System.out.println(Playlist);
         return ResponseEntity.ok().body(Playlist);
     }
+
+    @PostMapping("/Open")
+    public String openSpotify(@RequestParam String id){
+        if (id == null || id.isEmpty()) {
+            return "Error: Missing Spotify track ID!";
+        }
+
+        String spotifyUri = "spotify:track:" + id;
+        String webUrl = "https://open.spotify.com/track/" + id;
+
+        try {
+            if (isWindows()) {
+                // Windows: open Spotify URI via cmd
+                Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", spotifyUri});
+            } else {
+                // Fallback to browser
+                Runtime.getRuntime().exec(new String[]{"cmd", "/c", "start", webUrl});
+            }
+
+            System.out.println("✅ Opening Spotify track: " + spotifyUri);
+            return "Opening Spotify track with ID: " + id;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error launching Spotify: " + e.getMessage();
+        }
+    }
+
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("win");
+    }
+
 }
